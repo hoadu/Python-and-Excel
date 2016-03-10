@@ -1,4 +1,4 @@
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
 import os
 
 
@@ -20,10 +20,33 @@ if not os.path.exists(save_directory + '\Saved Workbook Directories.txt'):
     # Inform the user
     print('[INFO] Workbook save directory created: ' + save_directory + '\Saved Workbook Directories.txt')
 
-try:
-    # Get the workbook directory/name
-    workbook_directory = input('Enter the directory where the workbook is stored: ')
-    # Load the workbook.
-    wb = load_workbook(workbook_directory)
-except FileNotFoundError:
-    print('File \"' + workbook_directory + '\" not found.')
+# Prompt the user on whether or not to use an existing workbook.
+use_existing = input('Would you like to use an existing workbook (y/n): ')
+
+while True:
+    try:
+        if 'y' in use_existing:
+            # Get the workbook directory/name
+            workbook_directory = input('Enter the directory where the workbook is stored: ')
+
+            try:
+                # Load the workbook.
+                wb = load_workbook(workbook_directory)
+            except:
+                # Get the filename and file_extension of the given file.
+                filename, file_extension = os.path.splitext(workbook_directory)
+                # Print the issue
+                print('[ERROR] Incorrect file type \'' + file_extension + '\'.')
+                # Continue
+                continue
+        else:
+            # Prompt the user for the filename.
+            filename = input('Enter the name of the new workbook: ')
+            # Create the new workbook
+            wb = Workbook(filename)
+
+    except FileNotFoundError:
+        print('[INFO] File \"' + workbook_directory + '\" not found.')
+        continue
+    break
+
