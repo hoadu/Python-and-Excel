@@ -1,4 +1,5 @@
 from openpyxl import load_workbook, Workbook
+import openpyxl
 import os
 
 
@@ -32,7 +33,7 @@ while True:
             try:
                 # Load the workbook.
                 wb = load_workbook(workbook_directory)
-            except:
+            except openpyxl.utils.exceptions.InvalidFileException:
                 # Get the filename and file_extension of the given file.
                 filename, file_extension = os.path.splitext(workbook_directory)
                 # Print the issue
@@ -44,6 +45,8 @@ while True:
             filename = input('Enter the name of the new workbook: ')
             # Create the new workbook
             wb = Workbook(filename)
+            # Save the workbook
+            ########
 
     except FileNotFoundError:
         print('[INFO] File \"' + workbook_directory + '\" not found.')
